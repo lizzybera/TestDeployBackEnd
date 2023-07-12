@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const studentController_1 = require("../controller/studentController");
 const router = (0, express_1.Router)();
-router.route("/").get(studentController_1.read);
+router.route("/read").get(studentController_1.read);
 router.route("/register").post(studentController_1.register);
 router.route("/delete").delete(studentController_1.deleteStudent);
 router.route("/update").patch(studentController_1.updateStudent);

@@ -3,7 +3,7 @@ import { deleteStudent, read, register, updateStudent } from "../controller/stud
 
 const router = Router()
 
-router.route("/").get(read)
+router.route("/read").get(read)
 router.route("/register").post(register)
 router.route("/delete").delete(deleteStudent)
 router.route("/update").patch(updateStudent)
