@@ -13,7 +13,7 @@ export const read = async (req: Request, res: Response): Promise <Response> =>{
 
     } catch (error) {
         return res.status(404).json({
-            message: "Students not Found"
+            message: "Student not Found"
         })
     }
 }
