@@ -1,77 +1,92 @@
-import express, {Request,Response} from "express"
+import express, {Request, Response} from "express"
 import studentModel from "../model/studentModel"
 
-export const readuser = async (req: Request, res: Response): Promise<Response> =>{
+export const createTask = async (req: Request, res: Response): Promise<Response> =>{
+    try {
+        const {task, priority, isComplete} = req.body
+        const tasked = await studentModel.create({task, priority, isComplete})
+
+        return res.status(201).json({
+            message: "Task created sucessfully",
+            data: tasked
+        })
+
+    } catch (error) {
+        return res.status(404).json({
+            message: "Task cannot be created"
+        })
+    }
+}
+
+export const getTask = async (req: Request, res: Response): Promise<Response> =>{
     try {
         
-        const user = await studentModel.find().sort({ createdat: -1})
+        const tasked = await studentModel.find()
+        // .sort({ createdat: -1})
 
         return res.status(200).json({
-            message: "user gotten sucessfully",
-            data: user
+            message: "Task gotten sucessfully",
+            data: tasked
         })
 
     } catch (error) {
         return res.status(404).json({
-            message: "user cannot be gotten sucessfully"
+            message: "Task cannot be gotten sucessfully"
         })
     }
 }
 
-export const register = async (req: Request, res: Response): Promise <Response> =>{
+export const getOneTask = async (req: Request, res: Response): Promise<Response> =>{
     try {
-        const {name,studentClass, dob} = req.body
-
-        const user = await studentModel.create({name, studentClass, dob})
-
-        return res.status(200).json({
-            message: "Student registered",
-            data: user
-        })
-
-    } catch (error) {
-        return res.status(404).json({
-            message: "Students not registered"
-        })
-    }
-}
-
-export const updateStudent = async (req: Request, res: Response): Promise <Response> =>{
-    try {
-        const {studentClass} = req.body
         const {id} = req.params
+        const tasked = await studentModel.findById(id)
 
-        const user = await studentModel.findByIdAndUpdate(
+        return res.status(200).json({
+            message: "one Task gotten sucessfully",
+            data: tasked
+        })
+
+    } catch (error) {
+        return res.status(404).json({
+            message: "One Task cannot be gotten sucessfully"
+        })
+    }
+}
+
+export const updateTask = async (req: Request, res: Response): Promise<Response> =>{
+    try {
+        const {id} = req.params
+        const tasked = await studentModel.findByIdAndUpdate(
             id,
-            { studentClass},
-            {new: true})
+            {isComplete: true},
+            {new: true},
+            )
 
-        return res.status(200).json({
-            message: "Student updated",
-            data: user
+        return res.status(201).json({
+            message: "Task updated",
+            data: tasked
         })
 
     } catch (error) {
         return res.status(404).json({
-            message: "Students not updated"
+            message: "Task cannot be updated"
         })
     }
 }
 
-export const deleteStudent = async (req: Request, res: Response): Promise <Response> =>{
+export const deleteTask = async (req: Request, res: Response): Promise<Response> =>{
     try {
         const {id} = req.params
+        const tasked = await studentModel.findByIdAndDelete(id)
 
-        const user = await studentModel.findByIdAndDelete(id)
-
-        return res.status(200).json({
-            message: "Student deleted",
-            data: user
+        return res.status(201).json({
+            message: "Task deleted sucessfully",
+            data: tasked
         })
 
     } catch (error) {
         return res.status(404).json({
-            message: "Student not deleted"
+            message: "Task cannot be deleted"
         })
     }
 }
