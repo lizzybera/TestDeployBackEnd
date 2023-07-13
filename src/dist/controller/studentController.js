@@ -12,69 +12,85 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteStudent = exports.updateStudent = exports.register = exports.read = void 0;
+exports.deleteTask = exports.updateTask = exports.getOneTask = exports.getTask = exports.createTask = void 0;
 const studentModel_1 = __importDefault(require("../model/studentModel"));
-const read = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield studentModel_1.default.find();
-        return res.status(200).json({
-            message: "Student Found",
-            data: user
+        const { task, priority, isComplete } = req.body;
+        const tasked = yield studentModel_1.default.create({ task, priority, isComplete });
+        return res.status(201).json({
+            message: "Task created sucessfully",
+            data: tasked
         });
     }
     catch (error) {
         return res.status(404).json({
-            message: "Student not Found"
+            message: "Task cannot be created"
         });
     }
 });
-exports.read = read;
-const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createTask = createTask;
+const getTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, studentClass, dob } = req.body;
-        const user = yield studentModel_1.default.create({ name, studentClass, dob });
+        const tasked = yield studentModel_1.default.find();
+        // .sort({ createdat: -1})
         return res.status(200).json({
-            message: "Student registered",
-            data: user
+            message: "Task gotten sucessfully",
+            data: tasked
         });
     }
     catch (error) {
         return res.status(404).json({
-            message: "Students not registered"
+            message: "Task cannot be gotten sucessfully"
         });
     }
 });
-exports.register = register;
-const updateStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { studentClass } = req.body;
-        const { id } = req.params;
-        const user = yield studentModel_1.default.findByIdAndUpdate(id, { studentClass }, { new: true });
-        return res.status(200).json({
-            message: "Student updated",
-            data: user
-        });
-    }
-    catch (error) {
-        return res.status(404).json({
-            message: "Students not updated"
-        });
-    }
-});
-exports.updateStudent = updateStudent;
-const deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getTask = getTask;
+const getOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const user = yield studentModel_1.default.findByIdAndDelete(id);
+        const tasked = yield studentModel_1.default.findById(id);
         return res.status(200).json({
-            message: "Student deleted",
-            data: user
+            message: "one Task gotten sucessfully",
+            data: tasked
         });
     }
     catch (error) {
         return res.status(404).json({
-            message: "Student not deleted"
+            message: "One Task cannot be gotten sucessfully"
         });
     }
 });
-exports.deleteStudent = deleteStudent;
+exports.getOneTask = getOneTask;
+const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const tasked = yield studentModel_1.default.findByIdAndUpdate(id, { isComplete: true }, { new: true });
+        return res.status(201).json({
+            message: "Task updated",
+            data: tasked
+        });
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: "Task cannot be updated"
+        });
+    }
+});
+exports.updateTask = updateTask;
+const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const tasked = yield studentModel_1.default.findByIdAndDelete(id);
+        return res.status(201).json({
+            message: "Task deleted sucessfully",
+            data: tasked
+        });
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: "Task cannot be deleted"
+        });
+    }
+});
+exports.deleteTask = deleteTask;

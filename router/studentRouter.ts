@@ -9,4 +9,4 @@ router.route("/readOne/:id").get(getOneTask)
 router.route("/delete/:id").delete(deleteTask)
 router.route("/update/:id").patch(updateTask)
 
-export default router
+export default router   
